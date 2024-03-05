@@ -8,7 +8,7 @@ import torch
 
 from functools import partial
 
-from modeling import ImageEncoderViT, MaskDecoder, PromptEncoder, Sam, TwoWayTransformer
+from .modeling import ImageEncoderViT, MaskDecoder, PromptEncoder, Sam, TwoWayTransformer
 
 
 def build_sam_vit_h(checkpoint=None):
@@ -101,10 +101,7 @@ def _build_sam(
     )
     sam.eval()
     if checkpoint is not None:
-        if isinstance(checkpoint, str):
-            with open(checkpoint, "rb") as f:
-                state_dict = torch.load(f)
-            sam.load_state_dict(state_dict, strict=False)
-        else:
-            sam.load_state_dict(checkpoint, strict=False)
+        with open(checkpoint, "rb") as f:
+            state_dict = torch.load(f)
+        sam.load_state_dict(state_dict)
     return sam
